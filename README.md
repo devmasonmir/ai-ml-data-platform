@@ -83,7 +83,7 @@ ai-ml-data-platform/
 ## ⚡ Quickstart
 
 ```bash
-git clone https://github.com/masonmirtech/ai-ml-data-platform.git
+git clone https://github.com/devmasonmir/ai-ml-data-platform.git
 cd ai-ml-data-platform
 python -m venv venv
 .\venv\Scripts\activate
