@@ -51,6 +51,23 @@ flowchart TD
 * **RAG-Ready Dataset Pipeline**: Tokenizes and chunks enterprise knowledge assets into standardized formats ready for vector DB ingestion.
 * **Infrastructure as Code (Terraform)**: Full provisioning for feature stores, Databricks ML runtimes, and secure IAM roles.
 
+### Drift input contract
+
+`FeatureDriftDetector` accepts either histogram counts or proportions and normalizes
+each distribution before calculating PSI. Expected and actual inputs must contain
+the same non-empty set of bins with finite, non-negative numeric values. An all-zero
+distribution is rejected, while individual zero-frequency bins use epsilon smoothing
+so the score remains finite.
+
+The detector returns `NORMAL` below 0.1, `MODERATE_DRIFT` from 0.1 through 0.2,
+and `SIGNIFICANT_DRIFT` above 0.2.
+
+Run its dependency-free regression suite with:
+
+```bash
+python -m unittest tests.test_drift_detector -v
+```
+
 ---
 
 ## 📂 Project Structure
@@ -72,6 +89,7 @@ ai-ml-data-platform/
 │   ├── main.tf                    # S3, IAM, Databricks cluster IaC
 │   └── variables.tf
 ├── tests/
+│   ├── test_drift_detector.py     # PSI contract regression tests
 │   └── test_features.py           # Unit tests
 ├── docker-compose.yml
 ├── requirements.txt
@@ -86,7 +104,7 @@ ai-ml-data-platform/
 git clone https://github.com/devmasonmir/ai-ml-data-platform.git
 cd ai-ml-data-platform
 python -m venv venv
-.\venv\Scripts\activate
+.\\venv\\Scripts\\activate
 pip install -r requirements.txt
 pytest tests/ -v
 python -m src.features.feature_pipeline
