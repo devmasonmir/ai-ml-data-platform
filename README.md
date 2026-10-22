@@ -104,7 +104,7 @@ ai-ml-data-platform/
 git clone https://github.com/devmasonmir/ai-ml-data-platform.git
 cd ai-ml-data-platform
 python -m venv venv
-.\\venv\\Scripts\\activate
+.\venv\Scripts\activate
 pip install -r requirements.txt
 pytest tests/ -v
 python -m src.features.feature_pipeline
