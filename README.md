@@ -62,10 +62,17 @@ so the score remains finite.
 The detector returns `NORMAL` below 0.1, `MODERATE_DRIFT` from 0.1 through 0.2,
 and `SIGNIFICANT_DRIFT` above 0.2.
 
-Run its dependency-free regression suite with:
+### Feature input contract
+
+`compute_user_features` requires a list of transaction dictionaries. Each transaction
+must contain a non-empty string `user_id` and a finite numeric `amount`; booleans,
+numeric strings, missing fields, `NaN`, and infinities are rejected with an error that
+identifies the record index. User IDs are trimmed before aggregation.
+
+Run the dependency-free regression suite with:
 
 ```bash
-python -m unittest tests.test_drift_detector -v
+python -m unittest discover -s tests -v
 ```
 
 ---
