@@ -69,6 +69,14 @@ must contain a non-empty string `user_id` and a finite numeric `amount`; boolean
 numeric strings, missing fields, `NaN`, and infinities are rejected with an error that
 identifies the record index. User IDs are trimmed before aggregation.
 
+### RAG dataset input contract
+
+`RAGDatasetPreparer.prepare_dataset` requires a list of document dictionaries with
+unique, non-empty string `id` values. IDs and text are trimmed without modifying the
+source records, and duplicate IDs are rejected after normalization to prevent silent
+vector-store collisions. Text must be a string when supplied; a missing text field is
+represented as an empty, not-ready record. Validation errors identify the record index.
+
 Run the dependency-free regression suite with:
 
 ```bash
