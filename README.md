@@ -1,7 +1,5 @@
 # AI and Machine Learning Data Platform
 
-> Portfolio project aligned with Mason A. Mir's resume. Runnable components demonstrate feature aggregation, drift scoring, and RAG-ready data preparation; Databricks/ML operations shown in diagrams are reference architecture rather than deployed infrastructure.
-
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Databricks](https://img.shields.io/badge/Databricks-ML-FF3621.svg)](https://databricks.com/)
 [![PySpark](https://img.shields.io/badge/PySpark-3.4+-E25A1C.svg)](https://spark.apache.org/)
