@@ -89,7 +89,7 @@ python -m unittest discover -s tests -v
 
 ```
 ai-ml-data-platform/
-├── ci/ci.yml                      # CI pipeline
+├── .github/workflows/ci.yml       # GitHub Actions regression checks
 ├── docs/architecture.md           # Architecture design
 ├── src/
 │   ├── __init__.py
@@ -105,7 +105,8 @@ ai-ml-data-platform/
 │   └── variables.tf
 ├── tests/
 │   ├── test_drift_detector.py     # PSI contract regression tests
-│   └── test_features.py           # Unit tests
+│   ├── test_features.py           # Feature pipeline regression tests
+│   └── test_rag_preparer.py       # RAG preparation regression tests
 ├── docker-compose.yml
 ├── requirements.txt
 └── .gitignore
@@ -121,11 +122,22 @@ cd ai-ml-data-platform
 python -m venv venv
 .\venv\Scripts\activate
 pip install -r requirements.txt
-pytest tests/ -v
+python -m unittest discover -s tests -v
 python -m src.features.feature_pipeline
+```
+
+GitHub Actions runs compilation, linting, and the dependency-free regression
+suite on Python 3.10 and 3.12 for pushes to `main` and pull requests. Run the
+same core checks locally with:
+
+```bash
+python -m compileall -q src tests
+flake8 src tests --max-line-length=120
+python -m unittest discover -s tests -v
 ```
 
 ---
 
 ## 📜 License
 MIT License.
+
