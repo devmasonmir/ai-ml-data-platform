@@ -8,4 +8,3 @@ class UserFeatureRecord(BaseModel):
     total_transactions_30d: int
     account_age_days: int
     high_value_customer: bool
-
