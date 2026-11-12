@@ -63,9 +63,11 @@ and `SIGNIFICANT_DRIFT` above 0.2.
 ### Feature input contract
 
 `compute_user_features` requires a list of transaction dictionaries. Each transaction
-must contain a non-empty string `user_id` and a finite numeric `amount`; booleans,
-numeric strings, missing fields, `NaN`, and infinities are rejected with an error that
-identifies the record index. User IDs are trimmed before aggregation.
+must contain a non-empty string `user_id` and a finite numeric `amount`; finite
+`Decimal` values are accepted, while booleans, numeric strings, missing fields,
+`NaN`, and infinities are rejected with an error that identifies the record index.
+User IDs are trimmed before aggregation. Amounts are normalized to floats, so this
+example is intended for feature computation rather than exact financial reconciliation.
 
 ### RAG dataset input contract
 

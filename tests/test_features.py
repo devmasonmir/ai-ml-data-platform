@@ -1,3 +1,4 @@
+from decimal import Decimal
 import math
 import unittest
 
@@ -55,10 +56,41 @@ class FeaturePipelineTests(unittest.TestCase):
                     compute_user_features([{"user_id": "u1", "amount": amount}])
 
     def test_rejects_non_finite_amount(self):
-        for amount in (math.nan, math.inf, -math.inf):
+        for amount in (
+            math.nan,
+            math.inf,
+            -math.inf,
+            Decimal("NaN"),
+            Decimal("sNaN"),
+            Decimal("Infinity"),
+            Decimal("-Infinity"),
+            Decimal("1e9999"),
+        ):
             with self.subTest(amount=amount):
                 with self.assertRaisesRegex(ValueError, "amount must be finite"):
                     compute_user_features([{"user_id": "u1", "amount": amount}])
+
+    def test_accepts_finite_decimal_amounts(self):
+        features = compute_user_features([
+            {"user_id": "u1", "amount": Decimal("0.10")},
+            {"user_id": "u1", "amount": Decimal("0.20")},
+            {"user_id": "u2", "amount": Decimal("600.00")},
+        ])
+
+        self.assertEqual(features, [
+            {
+                "user_id": "u1",
+                "avg_order_value_30d": 0.15,
+                "total_transactions_30d": 2,
+                "high_value_customer": False,
+            },
+            {
+                "user_id": "u2",
+                "avg_order_value_30d": 600.0,
+                "total_transactions_30d": 1,
+                "high_value_customer": True,
+            },
+        ])
 
 
 class ExistingCapabilityTests(unittest.TestCase):

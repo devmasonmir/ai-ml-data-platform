@@ -1,4 +1,5 @@
 """PySpark Feature Transformation Pipeline."""
+from decimal import Decimal
 import logging
 import math
 from numbers import Real
@@ -19,12 +20,17 @@ def _validate_transaction(transaction: object, index: int) -> tuple[str, float]:
         )
 
     amount = transaction.get("amount")
-    if isinstance(amount, bool) or not isinstance(amount, Real):
+    if isinstance(amount, bool) or not isinstance(amount, (Real, Decimal)):
         raise TypeError(
-            f"transaction at index {index} amount must be a real number"
+            f"transaction at index {index} amount must be a real number or Decimal"
         )
 
-    normalized_amount = float(amount)
+    try:
+        normalized_amount = float(amount)
+    except (OverflowError, ValueError) as error:
+        raise ValueError(
+            f"transaction at index {index} amount must be finite"
+        ) from error
     if not math.isfinite(normalized_amount):
         raise ValueError(f"transaction at index {index} amount must be finite")
 
