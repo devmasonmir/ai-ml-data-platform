@@ -92,6 +92,19 @@ class FeaturePipelineTests(unittest.TestCase):
             },
         ])
 
+    def test_averages_large_finite_amounts_without_total_overflow(self):
+        features = compute_user_features([
+            {"user_id": "synthetic-large", "amount": 1e308},
+            {"user_id": "synthetic-large", "amount": 1e308},
+        ])
+
+        self.assertEqual(features, [{
+            "user_id": "synthetic-large",
+            "avg_order_value_30d": 1e308,
+            "total_transactions_30d": 2,
+            "high_value_customer": True,
+        }])
+
 
 class ExistingCapabilityTests(unittest.TestCase):
     def test_drift_normal(self):

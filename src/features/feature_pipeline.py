@@ -53,11 +53,14 @@ def compute_user_features(transactions: list) -> list:
 
     features = []
     for uid, data in user_data.items():
-        avg_val = math.fsum(data["amounts"]) / len(data["amounts"])
+        count = data["count"]
+        # Scale before summing so a representable mean does not fail when the
+        # unscaled total exceeds the floating-point range.
+        avg_val = math.fsum(amount / count for amount in data["amounts"])
         features.append({
             "user_id": uid,
             "avg_order_value_30d": round(avg_val, 2),
-            "total_transactions_30d": data["count"],
+            "total_transactions_30d": count,
             "high_value_customer": avg_val > 500.0
         })
     logger.info("Generated " + str(len(features)) + " feature records")

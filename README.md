@@ -68,6 +68,8 @@ must contain a non-empty string `user_id` and a finite numeric `amount`; finite
 `NaN`, and infinities are rejected with an error that identifies the record index.
 User IDs are trimmed before aggregation. Amounts are normalized to floats, so this
 example is intended for feature computation rather than exact financial reconciliation.
+Average calculation scales each finite amount before summation, preventing an
+intermediate overflow when the final mean remains representable.
 
 ### RAG dataset input contract
 
